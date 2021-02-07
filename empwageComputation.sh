@@ -3,6 +3,7 @@
 echo "Welcome to Employee Wage Computation Program."
 
 isPresent=1;
+isPartTime=2;
 wagePerHr=20;
 fullDay=8;
 dailyPayment=0;
@@ -12,6 +13,10 @@ then
 	echo "Employee is Present."
 	dailyPayment=$(($wagePerHr*$fullDay))
 	echo "Daily Payment is: " $dailyPayment
+elif [ $isPartTime -eq $checkRandom ];
+then
+	dailyPayment=$(($WagePerHr*$fullDay*$isPartTime))
+
 else
 	echo "Employee is Absent."
 	echo "Daily Payment is: " $dailyPayment
