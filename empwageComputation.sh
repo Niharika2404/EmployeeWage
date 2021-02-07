@@ -1,25 +1,32 @@
 #!/bin/bash -x
 
-echo "Welcome to Employee Wage Computation Program."
+echo "Welcome to Employee Wage  Computation Program."
 
-isPresent=1;
-isAbsent=0;
+isFullTime=1;
 isPartTime=2;
-wagePerHr=20;
-fullDay=8;
-dailyPayment=0;
-checkRandom=$((RANDOM%2))
+maxHrsInMonth=100;
+maxWorkingDays=20;
+empRatePerHr=20;
 
-case $checkRandom in
-			$isPresent)
-					dailyPayment=$(($wagePerHr*$fullDay))
-					echo "Daily Payment is: $dailyPayment"
+totalEmpHrs=0;
+totalWorkingDays=0;
+
+while [[ $totalEmpHrs -lt $maxHrsInMonth &&
+			$totalWorkingDays -lt $maxWorkingDays ]]
+do
+		((totalWorkingDays++))
+		empCheck=$((RANDOM%3));
+			case $empCheck in
+				$isFullTime)
+					empHrs=8
 						;;
 				$isPartTime)
-					dailyPayment=$(($wagePerHr*$fullDay*$isPartTime))
-					echo "Daily PAyment is: $dailyPayment"
+					empHrs=4
 						;;
-				$isAbsent)
-					echo "Daily Payment is: $dailyPayment"
+				*)
+					empHrs=2
 						;;
-esac
+			esac
+			totalEmpHrs=$(($totalEmpHrs*$empHrs))
+done
+		totalSalary=$(($totalEmpHrs*empRatePerHr))
