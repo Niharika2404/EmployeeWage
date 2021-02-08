@@ -11,42 +11,49 @@ fullDay=8;
 partTimeHr=4;
 dailyPayment=0;
 workingDay=20;
-salary=0;
 workingHrsLimit=100;
-workedHrs=0;
 
-for((day=1; day<=$workingDay; day++))
+
+workedHrs=0;
+salary=0;
+workedDays=0;
+dailyPayment=0;
+
+function getWorkHrs(){
+		case $1 in
+				$isfullTime)
+						workingHrs=$fullDay
+							;;
+				$isPartTime)
+						workingHrs=$partTimeHrs
+							;;
+				*)
+						workingHrs=0
+							;;
+		esac
+		echo $workingHrs
+}
+
+while [[ $workedDays -lt $workingDay && $workedHrs -lt $workingHrsLimit ]]
 do
-	checkRandom=$((RANDOM%2))
-	case $checkRandom in
-			$isPresent)
-					echo "Employee is Prrsent."
-					jobtype=$((RANDOM%2))
-					case $jobType in
-								$isFullTime)
-										workedHrs=$(($workedHrs + $fullDay))
-										dailyPayment=$(($wagesPerHr * $fullDay))
+		checkRandom=$((RANDOM%2))
+			case $checkRandom in
+							$isPresent)
+									echo "Employee is Present."
+									hrsWorked=$( getWorkHrs $((RANDOM%2)) )
+									workedHrs=$(($workedHrs + $hrsWorked))
+									dailyPayment=$(($wagesPerHr + $hrsWorked))
+									((workedDays++))
 										;;
-								$isPartTime)
-										workedHrs=$(($workedHrs + $partTimeHr))
-										dailyPayment=$(($wagesPerHr * $partTimeHr))
+							$isAbsent)
+									echo "Employee is Absent."
+									dailyPayment=0
 										;;
-								*)
-										echo "Invalid job type"
-					esac
-					;;
-			$isAbsent)
-					echo "Employee is absent."
-					;;
-			*)
-					echo "Invalid inputs."
-					;;
+							*)
+									echo "Invalid Inputs."
+
+										::
 			esac
-			salary=$(($dailyPayment+$salary))
-			if [ $workedHrs -ge $workingHrsLimit ]
-			then
-				break
-			fi
 done
 
 echo "Salary = $salary"
