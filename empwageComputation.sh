@@ -2,31 +2,51 @@
 
 echo "Welcome to Employee Wage  Computation Program."
 
+isPresent=1;
+isAbsent=0;
 isFullTime=1;
-isPartTime=2;
-maxHrsInMonth=100;
-maxWorkingDays=20;
-empRatePerHr=20;
+isPartTime=0;
+wagesPerHr=20;
+fullDay=8;
+partTimeHr=4;
+dailyPayment=0;
+workingDay=20;
+salary=0;
+workingHrsLimit=100;
+workedHrs=0;
 
-totalEmpHrs=0;
-totalWorkingDays=0;
-
-while [[ $totalEmpHrs -lt $maxHrsInMonth &&
-			$totalWorkingDays -lt $maxWorkingDays ]]
+for((day=1; day<=$workingDay; day++))
 do
-		((totalWorkingDays++))
-		empCheck=$((RANDOM%3));
-			case $empCheck in
-				$isFullTime)
-					empHrs=8
-						;;
-				$isPartTime)
-					empHrs=4
-						;;
-				*)
-					empHrs=2
-						;;
+	checkRandom=$((RANDOM%2))
+	case $checkRandom in
+			$isPresent)
+					echo "Employee is Prrsent."
+					jobtype=$((RANDOM%2))
+					case $jobType in
+								$isFullTime)
+										workedHrs=$(($workedHrs + $fullDay))
+										dailyPayment=$(($wagesPerHr * $fullDay))
+										;;
+								$isPartTime)
+										workedHrs=$(($workedHrs + $partTimeHr))
+										dailyPayment=$(($wagesPerHr * $partTimeHr))
+										;;
+								*)
+										echo "Invalid job type"
+					esac
+					;;
+			$isAbsent)
+					echo "Employee is absent."
+					;;
+			*)
+					echo "Invalid inputs."
+					;;
 			esac
-			totalEmpHrs=$(($totalEmpHrs*$empHrs))
+			salary=$(($dailyPayment+$salary))
+			if [ $workedHrs -ge $workingHrsLimit ]
+			then
+				break
+			fi
 done
-		totalSalary=$(($totalEmpHrs*empRatePerHr))
+
+echo "Salary = $salary"
